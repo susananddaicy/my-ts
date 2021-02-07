@@ -1,6 +1,7 @@
 let hello : string = 'hello ts'
 
 
+
 document.querySelectorAll('.app')[0].innerHTML = 'hello';
 
 
@@ -23,16 +24,17 @@ console.log(getValues(obj, ['b']));
 
 
 interface obj {
-  a: number,
-  b: number,
-  c: number
+  a: number;
+  b: number;
+  c: number;
+  d: number;
 }
 
 type pick = Pick<obj, 'a'>
 
 type readonly = Readonly<obj>
 
-type record = Record<'d', obj>
+type record = Record<'e', obj>
 
 
 
