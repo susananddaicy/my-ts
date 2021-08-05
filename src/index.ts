@@ -123,21 +123,177 @@ const person: Person = {
   companyId: 1,
 }
 
+// TypeScript 函数
+// 箭头函数
+const fun = () => {};
+
+// 函数类型
+let IdGenerator: (num: number, str: string) => string;
+
+function createUserId(num: number, str: string): string {
+  return num + str;
+}
+
+IdGenerator = createUserId;
+
+// 可选参数 剩余参数
+
+// 函数重载
+// TypeScript 中的函数重载也只是多个函数的声明，具体的逻辑还需要自己去写
+// 上边是声明
+function add (arg1: string, arg2: string): string
+function add (arg1: number, arg2: number): number
+
+// 下边是实现
+function add (arg1: string | number, arg2: string | number) {
+  // 在实现上我们要注意严格判断两个参数的类型是否相等，而不能简单的写一个 arg1 + arg2
+  if (typeof arg1 === 'string' && typeof arg2 === 'string') {
+    return arg1 + arg2
+  } else if (typeof arg1 === 'number' && typeof arg2 === 'number') {
+    return arg1 + arg2
+  }
+}
+
+
+// TypeScript 数组
+// 数组遍历
+let colors: number[] = [1, 2, 3];
+
+for(let c of colors) {
+  console.log('color', c)
+}
+
+// TypeScript 对象
+// 对象展开运算符
+let man: { age: number; name: string } = {
+  age: 12,
+  name: 'dog'
+};
+const { age, ...rest } = man;
+console.log('rest', rest)
+
+
+// TypeScript 接口
+// 对象的类型---------接口
+interface IIPerson {
+  readonly name: string;
+  age?: number;
+  [propName: string]: any // 希望一个接口允许有任意的属性, 一旦定义了任意属性，那么确定属性和可选属性的类型都必须是它的类型的子集
+}
+
+const myPerson: IIPerson = {
+  name: '123',
+  age: 12,
+  address: 'shanghai',
+}
+// myPerson.name = '23';
 
 
 
 
 
 
+let ro: ReadonlyArray<number> = [1, 2];
+// ro[0] = 1;
+
+// TypeScript 类
+class Greeter {
+  // 静态属性
+  static cname: string = 'daa';
+  // 成员属性
+  greeting: string;
+
+  constructor(message: string) {
+    this.greeting = message;
+  }
+
+  // 静态方法
+  static getClassName() {
+    return "Class name is Greeter";
+  }
+
+  // 成员方法
+  greet() {
+    return "Hello, " + this.greeting;
+  }
+
+}
+
+// 访问器
+class Employee {
+  private _fullName: string = '';
+
+  get fullName(): string {
+    console.log('getter: ' + this._fullName);
+    return this._fullName;
+  }
+
+  set fullName(newName: string) {
+    this._fullName = newName;
+    console.log('setter: ' + newName);
+  }
+}
+
+let employee = new Employee();
+employee.fullName = "Semlinker";
+if (employee.fullName) {
+  console.log(employee.fullName);
+}
 
 
 
+// 类的继承
+// extends 
+
+// TypeScript 泛型
+
+// 泛型接口
+interface GenericIdentityFn<T> {
+  (arg: T): T
+}
 
 
+// 泛型变量
+// typeof
+function toArray(x: number): Array<number> {
+  return [x];
+}
+typeof toArray
 
+// keyof
+interface KPerson {
+  name: string;
+  age: number;
+}
+type key = keyof KPerson;
+let value1: key = 'name'
+let value2: key = 'age'
 
+// in
+type keys = 'a' | 'b' | 'c';
+type obj2 = {
+  [p in keys] : any
+}
 
+// partial
+type partial<T> = {
+  [p in keyof T]?: T[p];
+}
+interface Todo {
+  title: string;
+  description: string;
+}
+function updateTodo(todo: Todo, fieldsToUpdate: Partial<Todo>) {
+  return { ...todo, ...fieldsToUpdate };
+}
+const todo1 = {
+  title: "organize desk",
+  description: "clear clutter",
+};
 
+const todo2 = updateTodo(todo1, {
+  description: "throw out trash",
+});
 
 
 
@@ -166,6 +322,9 @@ type pick = Pick<obj, 'a'>
 type readonly = Readonly<obj>
 
 type record = Record<'e', obj>
+
+
+
 
 
 
