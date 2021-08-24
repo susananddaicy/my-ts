@@ -438,9 +438,115 @@ type record = Record<'e', obj>
 
 
 
+// Pick
+// Pick<T, K>
+// 此方法允许你从一个已存在的类型 T中选择一些属性作为K, 从而创建一个新类型
+// 即 抽取一个类型/接口中的一些子集作为一个新的类型
+
+// 源码实现
+type Pick2<T, K extends keyof T> = {
+  [P in K]: T[P];
+};
+// 例子
+interface PickType {
+  id: number;
+  firstName: string;
+  lastName: string;
+}
+
+function showType(args: Pick<PickType, 'firstName' | 'lastName'>) {
+  console.log(args);
+}
+
+showType({ firstName: 'John', lastName: 'Doe' });
+// Output: {firstName: "John"}
+
+// showType({ id: 3 });
+// Error: Object literal may only specify known properties, and 'id' does not exist in type 'Pick<PickType, "firstName" | "lastName">'
 
 
 
+// Omit
+// Omit<T, K>
+// Omit的作用与Pick类型正好相反。不是选择元素，而是从类型T中删除K个属性。
+
+interface PickType2 {
+  id: number;
+  firstName: string;
+  lastName: string;
+}
+
+function showType2(args: Omit<PickType2, 'firstName' | 'lastName'>) {
+  console.log(args);
+}
+
+showType2({ id: 7 });
+// Output: {id: 7}
+
+// showType({ firstName: 'John' });
+// Error: Object literal may only specify known properties, and 'firstName' does not exist in type 'Pick<PickType, "id">'
 
 
+
+// Extract
+// Extract<T, U>
+// 提取T中可以赋值给U的类型--取交集
+
+interface FirstType {
+  id: number;
+  firstName: string;
+  lastName: string;
+}
+
+interface SecondType {
+  id: number;
+  address: string;
+  city: string;
+}
+
+type ExtractType = Extract<keyof FirstType, keyof SecondType>;
+// 在上面的代码中，FirstType接口和SecondType接口，都存在 id:number属性。因此，通过使用Extract，即提取出了新的类型 {id:number}。
+
+
+
+// Exclude
+// Exclude<T, U> --从 T 中剔除可以赋值给 U 的类型。
+
+interface FirstType2 {
+  id: number;
+  firstName: string;
+  lastName: string;
+}
+
+interface SecondType2 {
+  id: number;
+  address: string;
+  city: string;
+}
+
+type ExcludeType = Exclude<keyof FirstType2, keyof SecondType2>;
+// Output; "firstName" | "lastName"
+// 上面的代码可以看到，属性firstName和lastName 在SecondType类型中不存在。通过使用Extract关键字，我们可以获得T中存在而U中不存在的字段。
+
+
+
+// Record
+// Record<K,T>
+
+interface EmployeeType {
+  id: number;
+  fullname: string;
+  role: string;
+}
+
+let employees: Record<number, EmployeeType> = {
+  0: { id: 1, fullname: 'John Doe', role: 'Designer' },
+  1: { id: 2, fullname: 'Ibrahima Fall', role: 'Developer' },
+  2: { id: 3, fullname: 'Sara Duckson', role: 'Developer' },
+};
+
+
+// NonNullable
+// NonNullable<T>
+// 从 T 中剔除 null 和 undefined
 
