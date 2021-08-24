@@ -107,6 +107,10 @@ greet('1');
 greet(['1']);
 
 
+// 字符串字面量类型
+type EventEnum = 'click' | 'scroll' | 'mousemove';
+
+
 // 交叉类型
 // TypeScript 交叉类型是将多个类型合并为一个类型
 interface IPerson {
@@ -172,11 +176,10 @@ let man: { age: number; name: string } = {
 const { age, ...rest } = man;
 console.log('rest', rest)
 
-
 // TypeScript 接口
 // 对象的类型---------接口
 interface IIPerson {
-  readonly name: string;
+  readonly name: string; // 注意，只读的约束存在于第一次给对象赋值的时候，而不是第一次给只读属性赋值的时候：
   age?: number;
   [propName: string]: any // 希望一个接口允许有任意的属性, 一旦定义了任意属性，那么确定属性和可选属性的类型都必须是它的类型的子集
 }
@@ -189,10 +192,6 @@ const myPerson: IIPerson = {
 // myPerson.name = '23';
 
 
-
-
-
-
 let ro: ReadonlyArray<number> = [1, 2];
 // ro[0] = 1;
 
@@ -201,7 +200,14 @@ class Greeter {
   // 静态属性
   static cname: string = 'daa';
   // 成员属性
-  greeting: string;
+  // public 修饰的属性或方法是公有的，可以在任何地方被访问到，默认所有的属性和方法都是 public 的
+  // private 修饰的属性或方法是私有的，不能在声明它的类的外部访问 
+  // protected 修饰的属性或方法是受保护的，它和 private 类似，区别是它在子类中也是允许被访问的
+  public greeting: string;
+
+  age = 12; // 实例属性
+
+  private address = 'SH'; 
 
   constructor(message: string) {
     this.greeting = message;
@@ -294,6 +300,113 @@ const todo1 = {
 const todo2 = updateTodo(todo1, {
   description: "throw out trash",
 });
+
+
+
+// 声明文件
+// 当使用第三方库时，我们需要引用它的声明文件，才能获得对应的代码补全、接口提示等功能。
+
+// jQuery 的声明文件
+// npm install @types/jquery --save-dev
+
+// 当一个第三方库没有提供声明文件时 我们就需要自己书写声明文件了
+// 如何写声明文件
+declare let jQuery: (selector: string) => any;
+
+declare function jQuery2(selector: string): any;
+
+declare class jQuery3 {
+  name: string;
+  constructor(name: string);
+  sayHi(): string;
+}
+
+declare enum Direction2 {
+  up,
+  down,
+  left,
+  right,
+}
+
+
+// 表示全局变量是一个对象，包含很多子属性
+declare namespace JQuery4 {
+  function ajax(url: string, setting?: any): void;
+  const version: number;
+  class Event {
+  }
+  enum EventType {
+    customClick
+  }
+}
+
+// 在类型声明文件中，我们可以直接使用 interface 或 type 来声明一个全局的接口或类型
+// interface 和 type 
+// src/jQuery.d.ts
+
+interface AjaxSettings {
+  method?: 'GET' | 'POST'
+  data?: any;
+}
+declare namespace jQuery5 {
+  function ajax(url: string, settings?: AjaxSettings): void;
+}
+
+// 防止命名冲突
+// 暴露在最外层的 interface 或 type 会作为全局类型作用于整个项目中，我们应该尽可能的减少全局变量或全局类型的数量。故最好将他们放到 namespace 下
+
+// src/jQuery.d.ts
+declare namespace jQuery6 {
+  interface AjaxSettings {
+      method?: 'GET' | 'POST'
+      data?: any;
+  }
+  function ajax(url: string, settings?: AjaxSettings): void;
+}
+
+// 使用的时候 jQuery6.AjaxSettings
+
+
+// npm 包
+// 一般我们通过 import foo from 'foo' 导入一个 npm 包，这是符合 ES6 模块规范的。
+
+// 在我们尝试给一个 npm 包创建声明文件之前，需要先看看它的声明文件是否已经存在。一般来说，npm 包的声明文件可能存在于两个地方：
+
+// 与该 npm 包绑定在一起。判断依据是 package.json 中有 types 字段，或者有一个 index.d.ts 声明文件。这种模式不需要额外安装其他包，是最为推荐的，所以以后我们自己创建 npm 包的时候，最好也将声明文件与 npm 包绑定在一起。
+// 发布到 @types 里。我们只需要尝试安装一下对应的 @types 包就知道是否存在该声明文件，安装命令是 npm install @types/foo --save-dev。这种模式一般是由于 npm 包的维护者没有提供声明文件，所以只能由其他人将声明文件发布到 @types 里了。
+// 假如以上两种方式都没有找到对应的声明文件，那么我们就需要自己为它写声明文件了。由于是通过 import 语句导入的模块，所以声明文件存放的位置也有所约束，一般有两种方案：
+
+// 创建一个 node_modules/@types/foo/index.d.ts 文件，存放 foo 模块的声明文件。这种方式不需要额外的配置，但是 node_modules 目录不稳定，代码也没有被保存到仓库中，无法回溯版本，有不小心被删除的风险，故不太建议用这种方案，一般只用作临时测试。
+// 创建一个 types 目录，专门用来管理自己写的声明文件，将 foo 的声明文件放到 types/foo/index.d.ts 中。这种方式需要配置下 tsconfig.json 中的 paths 和 baseUrl 字段。
+
+
+
+
+
+
+// 内置对象
+// ECMAScript 的内置对象
+let r: RegExp = /[a-z]/;
+let flag2: Boolean = false;
+let date: Date = new Date();
+let error2: Error = new Error('Error');
+
+// DOM 和 BOM 的内置对象
+// Document、HTMLElement、Event、NodeList
+let body: HTMLElement = document.body;
+let divs: NodeList = document.querySelectorAll('div');
+document.addEventListener('click', function (e: MouseEvent) {
+});
+
+
+
+
+
+
+
+
+
+
 
 
 
