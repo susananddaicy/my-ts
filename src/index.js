@@ -114,7 +114,7 @@ greet(['1']);
 var person = {
     name: 'daichunyu',
     age: 20,
-    companyId: 1,
+    companyId: 1
 };
 // TypeScript 函数
 // 箭头函数
@@ -161,6 +161,8 @@ var ro = [1, 2];
 // TypeScript 类
 var Greeter = /** @class */ (function () {
     function Greeter(message) {
+        this.age = 12; // 实例属性
+        this.address = 'SH';
         this.greeting = message;
     }
     // 静态方法
@@ -212,18 +214,45 @@ function updateTodo(todo, fieldsToUpdate) {
 }
 var todo1 = {
     title: "organize desk",
-    description: "clear clutter",
+    description: "clear clutter"
 };
 var todo2 = updateTodo(todo1, {
-    description: "throw out trash",
+    description: "throw out trash"
 });
-var obj = {
-    a: 1,
-    b: 2,
-    c: 3
-};
-function getValues(obj, keys) {
-    return keys.map(function (key) { return obj[key]; });
+// 使用的时候 jQuery6.AjaxSettings
+// npm 包
+// 一般我们通过 import foo from 'foo' 导入一个 npm 包，这是符合 ES6 模块规范的。
+// 在我们尝试给一个 npm 包创建声明文件之前，需要先看看它的声明文件是否已经存在。一般来说，npm 包的声明文件可能存在于两个地方：
+// 与该 npm 包绑定在一起。判断依据是 package.json 中有 types 字段，或者有一个 index.d.ts 声明文件。这种模式不需要额外安装其他包，是最为推荐的，所以以后我们自己创建 npm 包的时候，最好也将声明文件与 npm 包绑定在一起。
+// 发布到 @types 里。我们只需要尝试安装一下对应的 @types 包就知道是否存在该声明文件，安装命令是 npm install @types/foo --save-dev。这种模式一般是由于 npm 包的维护者没有提供声明文件，所以只能由其他人将声明文件发布到 @types 里了。
+// 假如以上两种方式都没有找到对应的声明文件，那么我们就需要自己为它写声明文件了。由于是通过 import 语句导入的模块，所以声明文件存放的位置也有所约束，一般有两种方案：
+// 创建一个 node_modules/@types/foo/index.d.ts 文件，存放 foo 模块的声明文件。这种方式不需要额外的配置，但是 node_modules 目录不稳定，代码也没有被保存到仓库中，无法回溯版本，有不小心被删除的风险，故不太建议用这种方案，一般只用作临时测试。
+// 创建一个 types 目录，专门用来管理自己写的声明文件，将 foo 的声明文件放到 types/foo/index.d.ts 中。这种方式需要配置下 tsconfig.json 中的 paths 和 baseUrl 字段。
+// 内置对象
+// ECMAScript 的内置对象
+var r = /[a-z]/;
+var flag2 = false;
+var date = new Date();
+var error2 = new Error('Error');
+// DOM 和 BOM 的内置对象
+// Document、HTMLElement、Event、NodeList
+var body = document.body;
+var divs = document.querySelectorAll('div');
+document.addEventListener('click', function (e) {
+});
+function showType(args) {
+    console.log(args);
 }
-console.log(getValues(obj, ['a']));
-console.log(getValues(obj, ['b']));
+showType({ firstName: 'John', lastName: 'Doe' });
+function showType2(args) {
+    console.log(args);
+}
+showType2({ id: 7 });
+var employees = {
+    0: { id: 1, fullname: 'John Doe', role: 'Designer' },
+    1: { id: 2, fullname: 'Ibrahima Fall', role: 'Developer' },
+    2: { id: 3, fullname: 'Sara Duckson', role: 'Developer' }
+};
+// NonNullable
+// NonNullable<T>
+// 从 T 中剔除 null 和 undefined

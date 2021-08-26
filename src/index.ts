@@ -247,10 +247,6 @@ if (employee.fullName) {
 }
 
 
-
-// 类的继承
-// extends 
-
 // TypeScript 泛型
 
 // 泛型接口
@@ -300,7 +296,6 @@ const todo1 = {
 const todo2 = updateTodo(todo1, {
   description: "throw out trash",
 });
-
 
 
 // 声明文件
@@ -381,9 +376,6 @@ declare namespace jQuery6 {
 
 
 
-
-
-
 // 内置对象
 // ECMAScript 的内置对象
 let r: RegExp = /[a-z]/;
@@ -397,44 +389,6 @@ let body: HTMLElement = document.body;
 let divs: NodeList = document.querySelectorAll('div');
 document.addEventListener('click', function (e: MouseEvent) {
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-let obj = {
-  a: 1,
-  b: 2,
-  c: 3
-}
-
-function getValues<T, K extends keyof T>(obj: T, keys: K[]): T[K][] {
-  return keys.map((key) => obj[key])
-}
-
-console.log(getValues(obj, ['a']));
-console.log(getValues(obj, ['b']));
-
-interface obj {
-  a: number;
-  b: number;
-  c: number;
-  d: number;
-}
-
-type pick = Pick<obj, 'a'>
-
-type readonly = Readonly<obj>
-
-type record = Record<'e', obj>
 
 
 
