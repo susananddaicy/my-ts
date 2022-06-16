@@ -158,6 +158,17 @@ function add (arg1: string | number, arg2: string | number) {
   }
 }
 
+function reverse(x: number): number
+function reverse(x: string): string
+function reverse(x: number | string): number | string | void {
+    if (typeof x === 'number') {
+        return Number(x.toString().split('').reverse().join(''));
+    } else if (typeof x === 'string') {
+        return x.split('').reverse().join('');
+    }
+}
+
+
 
 // TypeScript 数组
 // 数组遍历
@@ -261,6 +272,51 @@ function toArray(x: number): Array<number> {
   return [x];
 }
 typeof toArray
+
+// 相当于type T = arg的类型
+function identity<T>(arg: T): T {
+  return arg
+}
+identity<string>('玩转vue 3全家桶') // 这个T就是string，所以返回值必须得是string
+identity<number>(1)
+
+
+// T extends U ? X : Y 类型三元表达式
+type ExtendsType<T> = T extends boolean ? "重学前端" : "玩转Vue 3"
+type ExtendsType1 = ExtendsType<boolean> // type ExtendsType1='重学前端'
+type ExtendsType2 = ExtendsType<string> // type ExtendsType2='玩转Vue 3'
+
+
+type Courses = '玩转Vue 3'|'重学前端'
+type CourseObj = {
+    [k in Courses] : number // 遍历Courses类型作为key
+}
+// 上面的代码等于下面的定义
+// type CourseObj = {
+//     玩转Vue 3: number;
+//     重学前端: number;
+// }
+
+function getProperty<T, K extends keyof T>(o: T, name: K): T[K] {
+  return o[name]
+}
+const coursePrice: CourseObj = {
+  "玩转Vue 3": 129,
+  "重学前端": 129
+}
+getProperty(coursePrice, '玩转Vue 3')
+// getProperty(coursePrice, '不学前端') // 报错
+
+
+// infer
+
+type Foo11 = () => CourseObj
+
+// 如果T是一个函数，并且函数返回类型是P就返回P
+type ReturnType1<T> = T extends () => infer P ? P: never 
+type Foo1 = ReturnType1<Foo11>
+
+
 
 // keyof
 interface KPerson {
@@ -389,6 +445,7 @@ let body: HTMLElement = document.body;
 let divs: NodeList = document.querySelectorAll('div');
 document.addEventListener('click', function (e: MouseEvent) {
 });
+let w: Window = window
 
 
 
@@ -504,3 +561,26 @@ let employees: Record<number, EmployeeType> = {
 // NonNullable<T>
 // 从 T 中剔除 null 和 undefined
 
+
+
+
+
+// 练习
+interface Todo {
+  title: string;
+  desc: string;
+  done: boolean;
+}
+
+
+type partTodo = Partial1<Todo>
+// 和下面类型一致，鼠标移动到partTodo变量上也能看到
+// type partTodo = {
+//     title?: string | undefined;
+//     desc?: string | undefined;
+//     done?: boolean | undefined;
+// }
+
+type Partial1<T> = {
+  [K in keyof T]? : T[K]
+}
